@@ -1,6 +1,8 @@
 import 'dart:math';
 
 import 'package:flutter/material.dart';
+import 'package:flutter_learners_app/pages/settings.dart';
+import 'package:flutter_learners_app/widgets/box.dart';
 
 class Home extends StatelessWidget {
   @override
@@ -8,26 +10,40 @@ class Home extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text('Flutter Learners App'),
+        actions: [
+          IconButton(
+            icon: Icon(Icons.settings),
+            onPressed: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) {
+                    return Settings();
+                  },
+                ),
+              );
+            },
+          )
+        ],
       ),
       body: Padding(
         padding: const EdgeInsets.all(8.0),
         child: Container(
-          child: Example(),
+          child: HomePageContent(),
         ),
       ),
     );
   }
 }
 
-class Example extends StatefulWidget {
+class HomePageContent extends StatefulWidget {
   @override
-  _ExampleState createState() {
+  _HomePageContentState createState() {
     print('create state');
-    return _ExampleState();
+    return _HomePageContentState();
   }
 }
 
-class _ExampleState extends State<Example> {
+class _HomePageContentState extends State<HomePageContent> {
   int count;
   String someString;
   final rand = Random();
@@ -57,6 +73,12 @@ class _ExampleState extends State<Example> {
     });
   }
 
+  onShowSnackbarPressed() {
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: Text("I'm a snackbar"),
+    ));
+  }
+
   @override
   Widget build(BuildContext context) {
     print('build');
@@ -77,59 +99,11 @@ class _ExampleState extends State<Example> {
           child: Text("Remove a box"),
           onPressed: onRemovePressed,
         ),
+        RaisedButton(
+          child: Text("Show a snackbar"),
+          onPressed: onShowSnackbarPressed,
+        ),
       ],
-    );
-  }
-}
-
-class Box extends StatefulWidget {
-  final int index;
-  final int randomNumber;
-
-  const Box({Key key, this.index, this.randomNumber}) : super(key: key);
-
-  @override
-  _BoxState createState() => _BoxState();
-}
-
-class _BoxState extends State<Box> {
-  @override
-  initState() {
-    print("I'm a box with index ${widget.index}");
-    super.initState();
-  }
-
-  @override
-  void didUpdateWidget(covariant Box oldWidget) {
-    print('widget with index ${widget.index} updated');
-    print('old random number: ${oldWidget.randomNumber}');
-    print('current random number: ${widget.randomNumber}');
-
-    super.didUpdateWidget(oldWidget);
-  }
-
-  @override
-  void dispose() {
-    print("A box with index ${widget.index} was removed");
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return Padding(
-      padding: const EdgeInsets.all(4.0),
-      child: Container(
-        height: 20,
-        color: Colors.yellow,
-        child: Center(
-            child: Row(
-          children: [
-            Text(widget.index.toString()),
-            SizedBox(width: 20),
-            Text(widget.randomNumber.toString()),
-          ],
-        )),
-      ),
     );
   }
 }
